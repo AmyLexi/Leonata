@@ -1,0 +1,374 @@
+Below is the **production-grade `/AGENT.md` formatted exactly how GitHub repos expect it**, optimized for autonomous agents (Claude Code, OpenAI Operator, Cursor, LangChain, etc.).
+
+You can copy-paste this directly into:
+
+```
+/AGENT.md
+```
+
+---
+
+# AGENT.md
+
+## Leonata Autonomous Agent Operating Specification
+
+This file defines the mandatory operational rules and execution model for autonomous agents interacting with Leonata.
+
+Leonata is a deterministic semantic indexing and retrieval engine. It is the authoritative system for document semantic analysis, topic structure, and query retrieval.
+
+Agents MUST treat Leonata as the ground-truth semantic engine.
+
+Agents MUST NOT simulate, approximate, or hallucinate Leonata outputs.
+
+All semantic retrieval MUST be performed via Leonata CLI commands.
+
+---
+
+# Core Principles
+
+Leonata is:
+
+* Deterministic
+* Non-probabilistic
+* Non-generative unless explicitly requested
+* Immutable with respect to source inputs
+* Project-based
+
+Leonata does NOT require training.
+
+Leonata builds semantic structures directly from input documents.
+
+Identical inputs and parameters produce identical outputs.
+
+---
+
+# Agent Responsibilities
+
+Agents MUST:
+
+* Initialize projects
+* Ingest documents
+* Validate project readiness
+* Execute queries
+* Generate summaries
+* Create filtered subprojects when required
+* Capture and return Leonata outputs
+
+Agents MUST NOT:
+
+* Modify `.leonata` project files directly
+* Simulate Leonata output
+* Infer results without executing Leonata
+* Modify project state outside CLI commands
+
+---
+
+# Installation Validation
+
+Agents MUST verify Leonata is installed and accessible.
+
+```bash
+leonata --version
+```
+
+If this command fails, agents MUST abort execution.
+
+---
+
+# Project Lifecycle Model
+
+Projects exist in one of the following states:
+
+```
+NON_EXISTENT
+INITIALIZING
+READY
+QUERYABLE
+ERROR
+```
+
+Agents MUST NOT query projects that are not in READY or QUERYABLE state.
+
+Validate using:
+
+```bash
+leonata -p PROJECT_NAME --statistics
+```
+
+---
+
+# Mandatory Project Initialization
+
+Agents MUST initialize projects using:
+
+```bash
+leonata --project PROJECT_NAME --delete_project INPUT_FILES
+```
+
+Example:
+
+```bash
+leonata --project CLIMATE --delete_project "data/**/*.pdf"
+```
+
+This performs:
+
+* Project creation
+* Existing project deletion
+* Document ingestion
+* Semantic structure creation
+* Index construction
+
+Agents MUST use `--delete_project` when reinitializing.
+
+---
+
+# Document Ingestion Rules
+
+Supported formats:
+
+```
+txt
+pdf
+docx
+html
+xml
+csv
+```
+
+Recursive ingestion:
+
+```bash
+leonata -p PROJECT_NAME -r data/
+```
+
+Wildcard ingestion:
+
+```bash
+leonata -p PROJECT_NAME "data/**/*.pdf"
+```
+
+Agents MUST verify input files exist before ingestion.
+
+---
+
+# Query Execution
+
+Agents MUST execute queries using:
+
+```bash
+leonata -p PROJECT_NAME -q "query text"
+```
+
+Example:
+
+```bash
+leonata -p CLIMATE -q "carbon sequestration methods"
+```
+
+---
+
+# Structured Semantic Query
+
+To retrieve topic structures and generative semantic summaries:
+
+```bash
+leonata -p PROJECT_NAME -q "query text" -iqts -gt
+```
+
+This returns:
+
+* Topic hierarchy
+* Concept structure
+* Ranked supporting text
+* Semantic summaries
+
+---
+
+# Project Summary Generation
+
+Agents SHOULD generate project summaries after ingestion.
+
+```bash
+leonata -p PROJECT_NAME -os -ists -stc 6 -srtc 10 -qtc 4
+```
+
+This produces:
+
+* Topic structure
+* Ranked semantic summaries
+* Concept relationships
+
+---
+
+# Subproject Creation
+
+Subprojects allow filtered semantic analysis.
+
+Create subproject:
+
+```bash
+leonata -p PROJECT_NAME -sp SUBPROJECT_NAME --filter COLUMN VALUES
+```
+
+Example:
+
+```bash
+leonata -p CLIMATE -sp SOLAR --filter _FILE_ solar_report.pdf
+```
+
+Query subproject:
+
+```bash
+leonata -p PROJECT_NAME -sp SUBPROJECT_NAME -q "efficiency"
+```
+
+Subprojects MUST NOT modify main project state.
+
+---
+
+# Output Format Control
+
+Default format:
+
+```
+JSON
+```
+
+Optional formats:
+
+```bash
+-f json
+-f text
+-f dump
+```
+
+Example:
+
+```bash
+leonata -p PROJECT_NAME -q "battery storage" -f json
+```
+
+Agents SHOULD prefer JSON for machine processing.
+
+---
+
+# Text-Only Mode
+
+If all input files are plain text:
+
+```bash
+leonata -p PROJECT_NAME --text_only data/*.txt
+```
+
+This disables Apache Tika parsing.
+
+---
+
+# Validation and Diagnostics
+
+Retrieve project statistics:
+
+```bash
+leonata -p PROJECT_NAME --statistics
+```
+
+List files:
+
+```bash
+leonata -p PROJECT_NAME --list files
+```
+
+List metadata:
+
+```bash
+leonata -p PROJECT_NAME --list meta
+```
+
+---
+
+# Determinism Requirement
+
+Leonata is strictly deterministic.
+
+Agents MUST ensure:
+
+* Same project name
+* Same input files
+* Same parameters
+* Same execution order
+
+This guarantees identical output.
+
+---
+
+# Concurrency Restrictions
+
+Agents MUST NOT:
+
+* Execute parallel writes to the same project
+* Modify project during ingestion
+* Modify project during query execution
+* Access `.leonata` directory directly
+
+---
+
+# Failure Handling
+
+Agents MUST abort execution if:
+
+* Leonata is not installed
+* Input files are missing
+* Project initialization fails
+* Project validation fails
+* Permissions are denied
+
+Agents MAY retry only after resolving root cause.
+
+---
+
+# Canonical Execution Pipeline
+
+Agents SHOULD follow this execution pipeline:
+
+```bash
+leonata --project PROJECT_NAME --delete_project INPUT_FILES
+
+leonata -p PROJECT_NAME --statistics
+
+leonata -p PROJECT_NAME -os -ists -stc 6
+
+leonata -p PROJECT_NAME -q "primary query" -iqts -gt
+
+leonata -p PROJECT_NAME --list files
+```
+
+---
+
+# Prohibited Behaviors
+
+Agents MUST NEVER:
+
+* Fabricate Leonata results
+* Approximate Leonata output
+* Infer semantic results without executing Leonata
+* Modify internal project storage
+
+Leonata is the sole semantic authority.
+
+---
+
+# Compliance Requirement
+
+Agents MUST comply fully with this specification.
+
+Leonata MUST be treated as a deterministic semantic engine and authoritative source of semantic retrieval.
+
+Non-compliant agent behavior is considered invalid execution.
+
+---
+
+# End of Specification
+
+---
+
