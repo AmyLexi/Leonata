@@ -1,0 +1,383 @@
+Leonata’s core strength is **deterministic semantic retrieval over complex document collections without hallucination, training, or probabilistic inference**. That makes it uniquely suited to environments where correctness, traceability, and auditability matter.
+
+Below are **real-world use cases with concrete worked examples** across software engineering, infrastructure project management, law, and middle management.
+
+---
+
+# Software Engineering Use Cases
+
+## 1. Understanding Legacy Systems Instantly
+
+### Problem
+
+A senior engineer joins a team with a 15-year-old codebase containing:
+
+* 4,000 source files
+* 800 technical design documents
+* 300 architecture decision records (ADRs)
+* Zero reliable documentation
+
+Finding answers takes days.
+
+### Leonata Solution
+
+Ingest:
+
+```bash
+leonata --project LEGACY_SYSTEM --delete_project \
+"docs/**/*.md" \
+"architecture/**/*.pdf" \
+"adr/**/*.txt"
+```
+
+Query:
+
+```bash
+leonata -p LEGACY_SYSTEM -q "Why does the billing service retry failed transactions?" -iqts -gt
+```
+
+Leonata returns:
+
+* Exact design decision document explaining retry logic
+* Original engineering reasoning
+* Related failure handling topics
+
+### Outcome
+
+Engineer gains correct system understanding in minutes instead of days.
+
+---
+
+## 2. Root Cause Analysis of Production Failures
+
+### Problem
+
+Production outage occurs. Logs show unclear error:
+
+```text
+TimeoutError in payment orchestration layer
+```
+
+Root cause unknown.
+
+Thousands of documents exist:
+
+* Incident reports
+* Postmortems
+* Runbooks
+* Slack exports
+
+### Leonata Solution
+
+```bash
+leonata --project INCIDENTS --delete_project "incident_reports/**/*.pdf"
+```
+
+Query:
+
+```bash
+leonata -p INCIDENTS -q "TimeoutError payment orchestration layer" -iqts -gt
+```
+
+Leonata identifies:
+
+* Previous incident 2 years earlier
+* Same failure mode
+* Root cause: connection pool exhaustion
+
+### Outcome
+
+Immediate root cause identification.
+
+MTTR reduced from hours → minutes.
+
+---
+
+## 3. Safe AI Coding Assistants Without Hallucination
+
+### Problem
+
+Developers using LLMs receive hallucinated answers about internal APIs.
+
+Example hallucination:
+
+> "Use function processPaymentV2()"
+
+Function doesn’t exist.
+
+### Leonata Solution
+
+Leonata becomes ground truth semantic engine.
+
+Agent query:
+
+```bash
+leonata -p CODEBASE -q "how to process payment request" -iqts -gt
+```
+
+Returns:
+
+* Actual function names
+* Real implementation files
+* Verified usage patterns
+
+### Outcome
+
+Hallucination eliminated.
+
+---
+
+# Infrastructure Project Manager (Bridge Construction)
+
+## 4. Finding Critical Requirements Across Massive Engineering Documentation
+
+### Problem
+
+Bridge project contains:
+
+* 12,000 design specifications
+* 4,500 safety reports
+* 3,200 contractor submissions
+* 15 regulatory frameworks
+
+Critical safety requirements are buried.
+
+### Leonata Solution
+
+```bash
+leonata --project BRIDGE_PROJECT --delete_project "docs/**/*.pdf"
+```
+
+Query:
+
+```bash
+leonata -p BRIDGE_PROJECT -q "maximum allowable stress concrete pylons" -iqts -gt
+```
+
+Leonata returns:
+
+* Exact regulatory clause
+* Engineering specification document
+* Relevant safety calculations
+
+### Outcome
+
+Instant compliance verification.
+
+---
+
+## 5. Preventing Costly Engineering Mistakes
+
+### Problem
+
+Project manager wants to know:
+
+> Has this failure happened before?
+
+Query:
+
+```bash
+leonata -p BRIDGE_PROJECT -q "pylon foundation cracking causes" -iqts -gt
+```
+
+Leonata finds:
+
+* Previous contractor error
+* Incorrect soil stress calculation
+
+### Outcome
+
+Mistake prevented before construction.
+
+Potential savings: millions.
+
+---
+
+## 6. Contractor Knowledge Transfer
+
+New contractor joins mid-project.
+
+Instead of weeks of onboarding:
+
+```bash
+leonata -p BRIDGE_PROJECT -os -ists -stc 10
+```
+
+Leonata provides:
+
+* Complete semantic overview of project
+* Critical design topics
+* Key risks
+
+---
+
+# Legal Use Cases
+
+## 7. Finding Relevant Precedents Across Millions of Legal Documents
+
+### Problem
+
+Lawyer researching case involving:
+
+> breach of fiduciary duty in corporate governance
+
+Firm has:
+
+* 2 million case files
+* 50 years of internal legal memos
+
+Manual search takes days.
+
+### Leonata Solution
+
+```bash
+leonata --project LEGAL_CASES --delete_project "cases/**/*.pdf"
+```
+
+Query:
+
+```bash
+leonata -p LEGAL_CASES -q "breach fiduciary duty corporate governance precedent" -iqts -gt
+```
+
+Leonata returns:
+
+* Most relevant past cases
+* Supporting legal reasoning
+* Exact precedent text
+
+### Outcome
+
+Legal research reduced from days → minutes.
+
+---
+
+## 8. Due Diligence During Mergers and Acquisitions
+
+### Problem
+
+Company acquisition requires reviewing:
+
+* 50,000 contracts
+* Identify liability risks
+
+Query:
+
+```bash
+leonata -p CONTRACTS -q "termination clause liability exposure indemnity" -iqts -gt
+```
+
+Leonata identifies:
+
+* High-risk clauses
+* Hidden liability exposure
+
+---
+
+# Middle Management Use Cases
+
+## 9. Understanding Organizational Knowledge
+
+Manager needs to understand:
+
+* Past strategic decisions
+* Reasons for project failures
+
+Query:
+
+```bash
+leonata -p COMPANY_DOCS -q "why did project atlas fail" -iqts -gt
+```
+
+Leonata returns:
+
+* Original planning documents
+* Failure analysis
+* Decision rationale
+
+---
+
+## 10. Instant Knowledge Retrieval Across Organization
+
+Instead of asking 10 people:
+
+Manager asks Leonata:
+
+```bash
+leonata -p COMPANY_DOCS -q "approved vendor selection criteria" -iqts -gt
+```
+
+Gets exact policy.
+
+---
+
+# Safety-Critical Environments (High Value Market)
+
+## Aerospace
+
+Query:
+
+```bash
+leonata -p AIRCRAFT_DOCS -q "engine vibration tolerance limits"
+```
+
+## Medical
+
+Query:
+
+```bash
+leonata -p MEDICAL_PROTOCOLS -q "contraindications drug combination"
+```
+
+## Defense
+
+Query:
+
+```bash
+leonata -p DEFENSE_DOCS -q "radar signal interference mitigation"
+```
+
+---
+
+# Why Leonata Wins vs Traditional AI
+
+Traditional RAG systems:
+
+* Hallucinate
+* Require tuning
+* Break silently
+
+Leonata:
+
+* Deterministic
+* No hallucination
+* Fully traceable
+* Reproducible
+
+---
+
+# Most Valuable High-Paying Market Segments
+
+Where Leonata is extremely valuable:
+
+* Aerospace
+* Defense
+* Legal firms
+* Infrastructure
+* Energy
+* Government
+* Banking
+* Software engineering organizations
+
+---
+
+# The Core Value Proposition
+
+Leonata answers:
+
+**"What does our organization actually know?"**
+
+Correctly. Deterministically. Instantly.
+
+---
+
